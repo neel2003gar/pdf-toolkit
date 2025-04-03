@@ -1,4 +1,6 @@
 Flask==2.0.1
+# Pin Werkzeug to a compatible version with Flask 2.0.1
+Werkzeug==2.0.1
 # Update PyMuPDF to version compatible with pdf2docx
 PyMuPDF>=1.19.0
 PyPDF2==3.0.1
