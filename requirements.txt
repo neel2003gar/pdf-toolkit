@@ -9,6 +9,8 @@ Pillow>=9.0.0
 reportlab==3.6.12
 pdf2docx==0.5.6
 Flask-SQLAlchemy==2.5.1
+# Pin SQLAlchemy to a version compatible with Flask-SQLAlchemy 2.5.1
+SQLAlchemy<2.0.0
 Flask-Login==0.5.0
 Flask-WTF==1.0.0
 Flask-Bcrypt==1.0.1
