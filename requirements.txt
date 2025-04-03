@@ -2,7 +2,8 @@ Flask==2.0.1
 # Use version of PyMuPDF that's available on PyPI
 PyMuPDF==1.18.17
 PyPDF2==3.0.1
-Pillow==8.3.1
+# Update Pillow to a version compatible with reportlab 3.6.12
+Pillow>=9.0.0
 reportlab==3.6.12
 pdf2docx==0.5.6
 Flask-SQLAlchemy==2.5.1
