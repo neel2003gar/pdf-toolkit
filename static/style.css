@@ -1,0 +1,441 @@
+/* Modern CSS for PDF Toolkit App */
+:root {
+    --primary-color: #4361ee;
+    --primary-light: #7296f8;
+    --primary-dark: #2f40a1;
+    --secondary-color: #3a0ca3;
+    --text-color: #333;
+    --background-color: #f8f9fa;
+    --card-color: #ffffff;
+    --accent-color: #ff5e00;
+    --error-color: #e63946;
+    --success-color: #2a9d8f;
+    --border-radius: 8px;
+    --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+header h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* Tab Styles */
+.tab-container {
+    margin-bottom: 2rem;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    color: #777;
+    transition: var(--transition);
+}
+
+.tab-button:hover {
+    color: var(--primary-color);
+}
+
+.tab-button.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    font-weight: 600;
+}
+
+.tab-content {
+    background-color: var(--card-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.tab-pane {
+    display: none;
+    padding: 0;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* Card styles */
+.card {
+    background-color: var(--card-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 2rem;
+    margin-bottom: 1rem;
+}
+
+.card h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.upload-area {
+    border: 2px dashed var(--primary-light);
+    border-radius: var(--border-radius);
+    padding: 3rem 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.upload-area:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(67, 97, 238, 0.03);
+}
+
+.upload-area.dragover {
+    border-color: var(--primary-color);
+    background-color: rgba(67, 97, 238, 0.05);
+}
+
+.drop-text i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.drop-text p {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.drop-text span {
+    display: block;
+    color: #888;
+    margin-bottom: 1rem;
+}
+
+.browse-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.browse-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+/* File list and preview styles */
+.file-list {
+    margin: 1.5rem 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem;
+    background-color: #f7f9fc;
+    border-radius: var(--border-radius);
+    margin-bottom: 0.5rem;
+}
+
+.file-item:hover {
+    background-color: #eef2fd;
+}
+
+.file-preview {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background-color: #f7f9fc;
+    border-radius: var(--border-radius);
+    display: none;
+}
+
+.file-preview.active {
+    display: block;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+}
+
+.file-icon {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-right: 0.8rem;
+}
+
+.file-name {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-actions button {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.file-actions button:hover {
+    color: var(--error-color);
+}
+
+/* Options container styles */
+.options-container {
+    background-color: #f7f9fc;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.options-container h3 {
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.option-group {
+    margin-bottom: 0.8rem;
+}
+
+.option-group label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.option-group input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+.sub-option {
+    margin-left: 1.5rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed #ddd;
+}
+
+.sub-option label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+}
+
+.sub-option input[type="text"] {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+}
+
+select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1rem;
+}
+
+/* Error message styles */
+.error-message {
+    background-color: rgba(230, 57, 70, 0.1);
+    border-left: 4px solid var(--error-color);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+}
+
+.error-message p {
+    color: var(--error-color);
+}
+
+/* Action button styles */
+.action-btn {
+    display: block;
+    width: 100%;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.action-btn:hover:not(:disabled) {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.action-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Button group styles */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.button-group .action-btn {
+    flex: 3;
+}
+
+.refresh-btn {
+    flex: 1;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.refresh-btn:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+.refresh-btn i {
+    margin-right: 0.5rem;
+}
+
+/* Features section */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.feature {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: var(--card-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.feature:hover {
+    transform: translateY(-5px);
+}
+
+.feature i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.feature h3 {
+    margin-bottom: 0.5rem;
+    color: var(--secondary-color);
+}
+
+.feature p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+footer {
+    text-align: center;
+    padding-top: 2rem;
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    .tabs {
+        flex-direction: column;
+    }
+    
+    .tab-button {
+        border-bottom: none;
+        border-left: 3px solid transparent;
+        text-align: left;
+    }
+    
+    .tab-button.active {
+        border-bottom-color: transparent;
+        border-left-color: var(--primary-color);
+        background-color: rgba(67, 97, 238, 0.05);
+    }
+    
+    .features {
+        grid-template-columns: 1fr;
+    }
+}

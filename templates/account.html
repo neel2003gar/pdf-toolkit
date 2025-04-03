@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - PDF Toolkit</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .account-container {
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+        
+        .account-card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 2rem;
+        }
+        
+        .account-card h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .account-info {
+            margin-bottom: 2rem;
+        }
+        
+        .account-info p {
+            margin-bottom: 0.5rem;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .btn-logout {
+            background-color: var(--error-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-logout:hover {
+            background-color: #c1121f;
+        }
+        
+        .flashes {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .flashes .success {
+            background-color: rgba(42, 157, 143, 0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            color: var(--success-color);
+        }
+        
+        .flashes .danger {
+            background-color: rgba(230, 57, 70, 0.1);
+            border-left: 4px solid var(--error-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            color: var(--error-color);
+        }
+        
+        .flashes .info {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            color: var(--primary-color);
+        }
+        
+        .account-actions {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-file-pdf"></i> PDF Toolkit</h1>
+            <p>All-in-one solution for PDF processing</p>
+            <nav>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('account') }}" class="active">Account</a>
+                <a href="{{ url_for('logout') }}">Logout</a>
+            </nav>
+        </header>
+
+        <main>
+            <div class="account-container">
+                <div class="account-card">
+                    <h2>Your Account</h2>
+                    
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <ul class="flashes">
+                                {% for category, message in messages %}
+                                    <li class="{{ category }}">{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    {% endwith %}
+                    
+                    <div class="account-info">
+                        <p><span class="info-label">Username:</span> {{ current_user.username }}</p>
+                        <p><span class="info-label">Email:</span> {{ current_user.email }}</p>
+                        <p><span class="info-label">Member since:</span> {{ current_user.date_registered.strftime('%Y-%m-%d') }}</p>
+                    </div>
+                    
+                    <div class="account-actions">
+                        <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 PDF Toolkit. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Toolkit</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* New Navigation Button Styles */
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.2rem;
+            gap: 1rem;
+        }
+        
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 0.7rem 1.2rem;
+            border-radius: var(--border-radius);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 100px;
+        }
+        
+        nav a:before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover:before {
+            width: 100%;
+        }
+        
+        nav a:hover {
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        nav a.active {
+            background-color: var(--primary-color);
+            color: white;
+            border: 2px solid var(--primary-color);
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.25);
+        }
+        
+        nav a.active:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Home button with icon */
+        nav a[href="{{ url_for('index') }}"] {
+            background-color: rgba(67, 97, 238, 0.1);
+            border: 2px solid var(--primary-light);
+        }
+        
+        nav a[href="{{ url_for('index') }}"]::before {
+            content: '\f015';
+            font-family: 'Font Awesome 5 Free';
+            margin-right: 5px;
+        }
+        
+        nav a[href="{{ url_for('index') }}"].active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* Register button styling */
+        nav a[href="{{ url_for('register') }}"] {
+            background-color: var(--background-color);
+            border: 2px solid #e9ecef;
+        }
+        
+        nav a[href="{{ url_for('register') }}"]::before {
+            content: '\f234';
+            font-family: 'Font Awesome 5 Free';
+            margin-right: 5px;
+        }
+        
+        nav a[href="{{ url_for('register') }}"]:hover {
+            border-color: var(--primary-light);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        /* Login button styling */
+        nav a[href="{{ url_for('login') }}"] {
+            background-color: var(--background-color);
+            border: 2px solid #e9ecef;
+        }
+        
+        nav a[href="{{ url_for('login') }}"]::before {
+            content: '\f2f6';
+            font-family: 'Font Awesome 5 Free';
+            margin-right: 5px;
+        }
+        
+        nav a[href="{{ url_for('login') }}"]:hover {
+            border-color: var(--primary-light);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        /* Account button styling */
+        nav a[href="{{ url_for('account') }}"] {
+            background-color: var(--background-color);
+            border: 2px solid #e9ecef;
+        }
+        
+        nav a[href="{{ url_for('account') }}"]::before {
+            content: '\f007';
+            font-family: 'Font Awesome 5 Free';
+            margin-right: 5px;
+        }
+        
+        nav a[href="{{ url_for('account') }}"]:hover {
+            border-color: var(--primary-light);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        /* Logout button styling */
+        nav a[href="{{ url_for('logout') }}"] {
+            background-color: rgba(230, 57, 70, 0.1);
+            color: var(--error-color);
+            border: 2px solid rgba(230, 57, 70, 0.3);
+        }
+        
+        nav a[href="{{ url_for('logout') }}"]::before {
+            content: '\f2f5';
+            font-family: 'Font Awesome 5 Free';
+            margin-right: 5px;
+        }
+        
+        nav a[href="{{ url_for('logout') }}"]:hover {
+            background-color: rgba(230, 57, 70, 0.15);
+            color: #c1121f;
+            border-color: rgba(230, 57, 70, 0.5);
+        }
+        
+        .user-greeting {
+            background-color: rgba(67, 97, 238, 0.05);
+            border-radius: var(--border-radius);
+            padding: 0.8rem 1rem;
+            margin-bottom: 1.2rem;
+            text-align: center;
+            border-left: 4px solid var(--primary-color);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-greeting .username {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .flashes {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .flashes .success {
+            background-color: rgba(42, 157, 143, 0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            color: var(--success-color);
+        }
+        
+        .flashes .danger {
+            background-color: rgba(230, 57, 70, 0.1);
+            border-left: 4px solid var(--error-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            color: var(--error-color);
+        }
+        
+        .flashes .info {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-file-pdf"></i> PDF Toolkit</h1>
+            <p>All-in-one solution for PDF processing</p>
+            <nav>
+                <a href="{{ url_for('index') }}" class="active">Home</a>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('account') }}">Account</a>
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Login</a>
+                    <a href="{{ url_for('register') }}">Register</a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <main>
+            {% if current_user.is_authenticated %}
+                <div class="user-greeting">
+                    <p>Welcome back, <span class="username">{{ current_user.username }}</span>!</p>
+                </div>
+            {% endif %}
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            
+            <div class="tab-container">
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="merge">Merge PDFs</button>
+                    <button class="tab-button" data-tab="split">Split PDF</button>
+                    <button class="tab-button" data-tab="compress">Compress PDF</button>
+                    <button class="tab-button" data-tab="to-docx">PDF to DOCX</button>
+                    <button class="tab-button" data-tab="to-jpg">PDF to JPG</button>
+                </div>
+
+                <div class="tab-content">
+                    <!-- Merge PDFs Tab -->
+                    <div class="tab-pane active" id="merge">
+                        <div class="card">
+                            <h2>Merge Multiple PDFs</h2>
+                            <form action="{{ url_for('merge_pdfs') }}" method="post" enctype="multipart/form-data" id="mergeForm">
+                                <div class="upload-area" id="uploadAreaMerge">
+                                    <div class="drop-text">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Drag and drop PDF files here</p>
+                                        <span>or</span>
+                                    </div>
+                                    <input type="file" name="files[]" id="file-input-merge" multiple accept=".pdf" hidden>
+                                    <button type="button" class="browse-btn" id="browseBtnMerge">Browse Files</button>
+                                </div>
+                                
+                                <div class="file-list" id="fileListMerge">
+                                    <!-- Selected files will appear here -->
+                                </div>
+                                
+                                <div class="button-group">
+                                    <button type="submit" class="action-btn" id="mergeBtnSubmit" disabled>
+                                        <i class="fas fa-object-group"></i> Merge PDFs
+                                    </button>
+                                    <button type="button" class="refresh-btn" id="refreshMerge">
+                                        <i class="fas fa-sync-alt"></i> Refresh
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Split PDF Tab -->
+                    <div class="tab-pane" id="split">
+                        <div class="card">
+                            <h2>Split PDF Pages</h2>
+                            <form action="{{ url_for('split_pdf') }}" method="post" enctype="multipart/form-data" id="splitForm">
+                                <div class="upload-area" id="uploadAreaSplit">
+                                    <div class="drop-text">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Drag and drop a PDF file here</p>
+                                        <span>or</span>
+                                    </div>
+                                    <input type="file" name="file" id="file-input-split" accept=".pdf" hidden>
+                                    <button type="button" class="browse-btn" id="browseBtnSplit">Browse File</button>
+                                </div>
+                                
+                                <div class="file-preview" id="filePreviewSplit">
+                                    <!-- Selected file will appear here -->
+                                </div>
+                                
+                                <div class="options-container">
+                                    <h3>Split Options</h3>
+                                    <div class="option-group">
+                                        <label>
+                                            <input type="radio" name="split_method" value="all" checked>
+                                            Split all pages into separate PDFs
+                                        </label>
+                                    </div>
+                                    <div class="option-group">
+                                        <label>
+                                            <input type="radio" name="split_method" value="range">
+                                            Extract specific pages
+                                        </label>
+                                        <div class="sub-option">
+                                            <label for="page_range">Page range (e.g., 1-3,5,7-9):</label>
+                                            <input type="text" name="page_range" id="page_range" placeholder="1-3,5,7-9">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="button-group">
+                                    <button type="submit" class="action-btn" id="splitBtnSubmit" disabled>
+                                        <i class="fas fa-cut"></i> Split PDF
+                                    </button>
+                                    <button type="button" class="refresh-btn" id="refreshSplit">
+                                        <i class="fas fa-sync-alt"></i> Refresh
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Compress PDF Tab -->
+                    <div class="tab-pane" id="compress">
+                        <div class="card">
+                            <h2>Compress PDF</h2>
+                            <form action="{{ url_for('compress_pdf') }}" method="post" enctype="multipart/form-data" id="compressForm">
+                                <div class="upload-area" id="uploadAreaCompress">
+                                    <div class="drop-text">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Drag and drop a PDF file here</p>
+                                        <span>or</span>
+                                    </div>
+                                    <input type="file" name="file" id="file-input-compress" accept=".pdf" hidden>
+                                    <button type="button" class="browse-btn" id="browseBtnCompress">Browse File</button>
+                                </div>
+                                
+                                <div class="file-preview" id="filePreviewCompress">
+                                    <!-- Selected file will appear here -->
+                                </div>
+                                
+                                <div class="options-container">
+                                    <h3>Compression Level</h3>
+                                    <div class="option-group">
+                                        <label>
+                                            <input type="radio" name="compression_level" value="low">
+                                            Low (better quality, larger file)
+                                        </label>
+                                    </div>
+                                    <div class="option-group">
+                                        <label>
+                                            <input type="radio" name="compression_level" value="medium" checked>
+                                            Medium (balanced)
+                                        </label>
+                                    </div>
+                                    <div class="option-group">
+                                        <label>
+                                            <input type="radio" name="compression_level" value="high">
+                                            High (smaller file, lower quality)
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="button-group">
+                                    <button type="submit" class="action-btn" id="compressBtnSubmit" disabled>
+                                        <i class="fas fa-compress-alt"></i> Compress PDF
+                                    </button>
+                                    <button type="button" class="refresh-btn" id="refreshCompress">
+                                        <i class="fas fa-sync-alt"></i> Refresh
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- PDF to DOCX Tab -->
+                    <div class="tab-pane" id="to-docx">
+                        <div class="card">
+                            <h2>Convert PDF to DOCX</h2>
+                            <form action="{{ url_for('pdf_to_docx') }}" method="post" enctype="multipart/form-data" id="docxForm">
+                                <div class="upload-area" id="uploadAreaDocx">
+                                    <div class="drop-text">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Drag and drop a PDF file here</p>
+                                        <span>or</span>
+                                    </div>
+                                    <input type="file" name="file" id="file-input-docx" accept=".pdf" hidden>
+                                    <button type="button" class="browse-btn" id="browseBtnDocx">Browse File</button>
+                                </div>
+                                
+                                <div class="file-preview" id="filePreviewDocx">
+                                    <!-- Selected file will appear here -->
+                                </div>
+                                
+                                <div class="button-group">
+                                    <button type="submit" class="action-btn" id="docxBtnSubmit" disabled>
+                                        <i class="fas fa-file-word"></i> Convert to DOCX
+                                    </button>
+                                    <button type="button" class="refresh-btn" id="refreshDocx">
+                                        <i class="fas fa-sync-alt"></i> Refresh
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- PDF to JPG Tab -->
+                    <div class="tab-pane" id="to-jpg">
+                        <div class="card">
+                            <h2>Convert PDF to JPG</h2>
+                            <form action="{{ url_for('pdf_to_jpg') }}" method="post" enctype="multipart/form-data" id="jpgForm">
+                                <div class="upload-area" id="uploadAreaJpg">
+                                    <div class="drop-text">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Drag and drop a PDF file here</p>
+                                        <span>or</span>
+                                    </div>
+                                    <input type="file" name="file" id="file-input-jpg" accept=".pdf" hidden>
+                                    <button type="button" class="browse-btn" id="browseBtnJpg">Browse File</button>
+                                </div>
+                                
+                                <div class="file-preview" id="filePreviewJpg">
+                                    <!-- Selected file will appear here -->
+                                </div>
+                                
+                                <div class="options-container">
+                                    <h3>Image Quality</h3>
+                                    <div class="option-group">
+                                        <label for="dpi">Resolution (DPI):</label>
+                                        <select name="dpi" id="dpi">
+                                            <option value="150">150 DPI (Low)</option>
+                                            <option value="300" selected>300 DPI (Medium)</option>
+                                            <option value="600">600 DPI (High)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="button-group">
+                                    <button type="submit" class="action-btn" id="jpgBtnSubmit" disabled>
+                                        <i class="fas fa-file-image"></i> Convert to JPG
+                                    </button>
+                                    <button type="button" class="refresh-btn" id="refreshJpg">
+                                        <i class="fas fa-sync-alt"></i> Refresh
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% if error %}
+            <div class="error-message">
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-lock"></i>
+                    <h3>Secure</h3>
+                    <p>Files are processed locally and not stored on servers</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Fast</h3>
+                    <p>Quick processing for efficient document management</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-desktop"></i>
+                    <h3>Easy to Use</h3>
+                    <p>Simple interface for all your PDF needs</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 PDF Toolkit. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
