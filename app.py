@@ -62,6 +62,10 @@ def load_user(user_id):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
+# Create the database tables
+with app.app_context():
+    db.create_all()
+
 # Authentication routes
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -454,9 +458,6 @@ def pdf_to_jpg():
         return render_template('index.html', error=f'Error converting PDF to JPG: {str(e)}')
 
 if __name__ == '__main__':
-    # Create the database tables if they don't exist
-    with app.app_context():
-        db.create_all()
     # Run the app
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
